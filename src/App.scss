@@ -1,47 +1,62 @@
-.app {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	max-height: 100%;
-}
-
-.codebox {
+.react-codemirror2 {
+	flex: 1 1 auto;
+	margin-top: 0;
+	height: calc(100% - 56px);
+	position: relative;
 	.CodeMirror {
 		height: 100%;
+	}
+
+	.CodeMirror * {
+		font-family: 'Noto Mono', 'Roboto Mono', monospace;
+		font-size: 0.945rem;
 	}
 }
 
 .controls {
 	background-color: #171e21 !important;
 	justify-content: space-around !important;
-	color: #ffffff;
-}
+	color: #fff;
 
-.react-codemirror2 {
-	flex: 1 1 auto;
-	margin-top: 0;
-	height: calc(100% - 56px);
-	position: relative;
-}
+	.MuiButtonBase-root {
+		&.MuiBottomNavigationAction-root {
+			border: 1px solid rgba(23, 30, 33, 0.1) !important;
+			color: rgba(255, 255, 255, 0.7);
+			margin: 0 0.05rem;
+			transition: border 0.25s linear, color 0.25s linear;
+		}
+		&:hover {
+			color: rgba(255, 255, 255, 1);
+			border: 1px solid rgba(255, 255, 255, 0.2) !important;
+			transition: border 0.25s linear, color 0.25s linear;
+		}
 
-.MuiButtonBase-root {
-	&.MuiBottomNavigationAction-root {
-		border: 1px solid rgba(23, 30, 33, 0.1) !important;
-		color: rgba(255, 255, 255, 0.7);
-		margin: 0 0.1rem;
-		transition: border 0.25s linear, color 0.25s linear;
-	}
-
-	&.unsaved-save {
-		color: #1de9b6 !important;
-		background-color: rgba(0, 0, 0, 0.35);
-		border: 1px solid #1de9b6 !important;
-		transition: border 0.25s linear, color 0.25s linear;
-	}
-	&.unsaved-reset {
-		color: #ff6d00 !important;
-		background-color: rgba(0, 0, 0, 0.35);
-		border: 1px solid #ff6d00 !important;
-		transition: border 0.25s linear, color 0.25s linear;
+		&.unsaved-save {
+			color: #1de9b6 !important;
+			background-color: rgba(0, 0, 0, 0.45);
+			border: 1px solid #1de9b6 !important;
+			transition: background-color 0.25s linear, border 0.25s linear, color 0.25s linear;
+			&:hover {
+				color: #1de9b6 !important;
+				background-color: rgba(0, 0, 0, 0.65);
+				border: 1px solid #1de9b6 !important;
+				transition: background-color 0.25s linear;
+			}
+		}
+		&.unsaved-reset {
+			color: #ff6d00 !important;
+			background-color: rgba(0, 0, 0, 0.45);
+			border: 1px solid #ff6d00 !important;
+			transition: background-color 0.25s linear, border 0.25s linear, color 0.25s linear;
+			&:hover {
+				color: #ff6d00 !important;
+				background-color: rgba(0, 0, 0, 0.65);
+				border: 1px solid #ff6d00 !important;
+				transition: background-color 0.25s linear;
+			}
+		}
+		.MuiBottomNavigationAction-label {
+			font-size: 1rem;
+		}
 	}
 }

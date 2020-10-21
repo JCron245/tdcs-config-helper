@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
@@ -63,7 +64,7 @@ const copyToClipboard = (data: any, title: string = 'tdcs.data') => {
 export const App = () => {
 	const [cleanCopy, setCleanCopy] = useState<any>();
 	const [editorCopy, setEditorCopy] = useState<any>();
-	const [title, setTitle] = useState<any>('tdcs.data');
+	const [title] = useState<any>('tdcs.data');
 
 	useEffect(() => {
 		try {
@@ -100,9 +101,8 @@ export const App = () => {
 	}, [editorCopy]);
 
 	return (
-		<div className="app">
+		<>
 			<CodeMirror
-				className="codebox"
 				value={editorCopy}
 				options={codeMirrorOptions}
 				onBeforeChange={(editor, data, value) => {
@@ -115,6 +115,7 @@ export const App = () => {
 					className={editorCopy !== cleanCopy ? 'unsaved-save' : ''}
 					label="Save"
 					value="Save"
+					title="Save this object to localStorage"
 					onClick={saveData}
 					icon={<SaveIcon />}
 				/>
@@ -122,12 +123,14 @@ export const App = () => {
 					className={editorCopy !== cleanCopy ? 'unsaved-reset' : ''}
 					label="Reset"
 					value="Reset"
+					title="Reset the object to the last saved value"
 					onClick={() => setEditorCopy(cleanCopy)}
 					icon={<RestorePageIcon />}
 				/>
 				<BottomNavigationAction
 					label="Prettify"
 					value="Prettify"
+					title="Format the object using prettier"
 					onClick={() => setEditorCopy(prettifyData(editorCopy, title))}
 					icon={<LineStyleIcon />}
 				/>
@@ -146,6 +149,6 @@ export const App = () => {
 					icon={<FileCopyIcon />}
 				/>
 			</BottomNavigation>
-		</div>
+		</>
 	);
 };

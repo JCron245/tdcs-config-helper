@@ -6,7 +6,6 @@ const prettierOptions: Options = {
 	parser: 'babel',
 	plugins: [babylon],
 	useTabs: true,
-	tabWidth: 2,
 	singleQuote: true,
 	jsxBracketSameLine: true,
 	printWidth: 140,
