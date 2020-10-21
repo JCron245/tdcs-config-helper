@@ -1,43 +1,68 @@
 {
-  "name": "tdcs-config",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@types/js-beautify": "^1.11.0",
-    "@types/node": "^12.12.67",
-    "@types/react": "^16.9.52",
-    "@types/react-codemirror": "^1.0.3",
-    "@types/react-dom": "^16.9.8",
-    "codemirror": "^5.58.1",
-    "js-beautify": "^1.13.0",
-    "node-sass": "^4.14.1",
-    "react": "^16.14.0",
-    "react-codemirror2": "^7.2.1",
-    "react-dom": "^16.14.0",
-    "react-scripts": "3.4.3",
-    "typescript": "^3.7.5"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "tdcs-config",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@craco/craco": "^5.7.0",
+		"@material-ui/core": "^4.11.0",
+		"@material-ui/icons": "^4.9.1",
+		"@types/js-beautify": "^1.11.0",
+		"@types/node": "^12.12.67",
+		"@types/prettier": "^2.1.5",
+		"@types/react": "^16.9.52",
+		"@types/react-codemirror": "^1.0.3",
+		"@types/react-dom": "^16.9.8",
+		"codemirror": "^5.58.1",
+		"husky": "^4.3.0",
+		"jshint": "^2.12.0",
+		"lint-staged": "^10.4.2",
+		"node-sass": "^4.14.1",
+		"prettier": "^2.1.2",
+		"react": "^16.14.0",
+		"react-codemirror2": "^7.2.1",
+		"react-dom": "^16.14.0",
+		"react-scripts": "3.4.3",
+		"typescript": "^3.7.5"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"lint": "eslint ./src --ext .ts,.tsx",
+		"prettier": "prettier \"**/*.{json,md,scss,ts,tsx}\" --write"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run lint && lint-staged",
+			"pre-push": "npm run build"
+		}
+	},
+	"lint-staged": {
+		"src/**/*.{js.jsx,ts,tsx,json,css,scss,md}": [
+			"prettier --write"
+		]
+	},
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 2,
+		"singleQuote": true,
+		"jsxBracketSameLine": true,
+		"printWidth": 140
+	}
 }
