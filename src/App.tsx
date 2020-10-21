@@ -23,6 +23,7 @@ import 'codemirror/addon/fold/foldgutter.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/javascript-lint';
+import { exampleData } from './exampleData';
 
 const codeMirrorOptions: any = {
 	mode: 'javascript',
@@ -40,24 +41,23 @@ const codeMirrorOptions: any = {
 	lint: true,
 };
 
-const exampleData = {
-	name: 'test name',
-	inner: {
-		value: 'test',
-		num: 5,
-	},
-};
 const copyToClipboard = (data: any, title: string = 'tdcs.data') => {
-	const objIndex = data.indexOf('{');
-	const str = `localStorage.setItem('${title}',${JSON.stringify(data.substring(objIndex))})`;
-	navigator.clipboard
-		.writeText(str)
-		.then(() => {
-			console.log('[INFO] Successfully copied to clipboard! ⭐');
-		})
-		.catch((e) => {
-			console.error('[ERROR] Something has gone catastrophically wrong with this clipboard operation 😱', e);
-		});
+	try {
+		const objIndex = data.indexOf('{');
+		const copyStr = `localStorage.setItem('${title}', JSON.stringify(${data.substring(objIndex, data.length - 2)}));`;
+		navigator.clipboard
+			.writeText(copyStr)
+			.then(() => {
+				console.log('[INFO] Successfully copied to clipboard! ⭐');
+			})
+			.catch((e) => {
+				console.error('[ERROR] Something has gone catastrophically wrong with this clipboard operation 😱', e);
+			});
+	} catch (e) {
+		console.error('[ERROR] Oops something went wrong copying to the clipboard! 😱', e);
+		console.warn('Data: ', data);
+		console.groupEnd();
+	}
 };
 
 export const App = () => {
@@ -68,30 +68,32 @@ export const App = () => {
 	useEffect(() => {
 		try {
 			let lsData = localStorage.getItem(title);
-			let data = exampleData;
+			let data: any = exampleData;
 			if (lsData) {
 				console.log('[INFO] Found Local Storage Data ✅');
 				data = JSON.parse(lsData);
 			}
 
-			const prettified = prettifyData(JSON.stringify(data), title);
+			const prettified = prettifyData(data, title);
 			setCleanCopy(prettified);
-			setEditorCopy(prettified);
 		} catch (e) {
 			console.error('[ERROR] Oops something went wrong! Falling back to example data! 😱', e);
 			const prettified = prettifyData(JSON.stringify(exampleData), title);
 			setCleanCopy(prettified);
-			setEditorCopy(prettified);
 		}
 	}, []);
+
+	useEffect(() => {
+		setEditorCopy(cleanCopy);
+	}, [cleanCopy]);
 
 	const saveData = useCallback(() => {
 		try {
 			const prettified = prettifyData(editorCopy, title);
 			const objIndex = editorCopy.indexOf('{');
-			localStorage.setItem(title, editorCopy.substring(objIndex));
+			let t = editorCopy.substring(objIndex, editorCopy.length - 2);
+			localStorage.setItem(title, JSON.stringify(t));
 			setCleanCopy(prettified);
-			setEditorCopy(prettified);
 		} catch (e) {
 			console.error('[ERROR] Oops something went wrong trying to save that! 😱', e);
 		}
@@ -109,15 +111,40 @@ export const App = () => {
 				onChange={() => {}}
 			/>
 			<BottomNavigation className="controls" showLabels>
-				<BottomNavigationAction label="Save" value="Save" onClick={saveData} icon={<SaveIcon />} />
-				<BottomNavigationAction label="Reset" value="Reset" onClick={() => setEditorCopy(cleanCopy)} icon={<RestorePageIcon />} />
+				<BottomNavigationAction
+					className={editorCopy !== cleanCopy ? 'unsaved-save' : ''}
+					label="Save"
+					value="Save"
+					onClick={saveData}
+					icon={<SaveIcon />}
+				/>
+				<BottomNavigationAction
+					className={editorCopy !== cleanCopy ? 'unsaved-reset' : ''}
+					label="Reset"
+					value="Reset"
+					onClick={() => setEditorCopy(cleanCopy)}
+					icon={<RestorePageIcon />}
+				/>
 				<BottomNavigationAction
 					label="Prettify"
 					value="Prettify"
 					onClick={() => setEditorCopy(prettifyData(editorCopy, title))}
 					icon={<LineStyleIcon />}
 				/>
-				<BottomNavigationAction label="Copy" value="Copy" onClick={() => copyToClipboard(editorCopy, title)} icon={<FileCopyIcon />} />
+				<BottomNavigationAction
+					label="Copy"
+					value="Copy"
+					title="Copy just the object"
+					onClick={() => copyToClipboard(editorCopy, title)}
+					icon={<FileCopyIcon />}
+				/>
+				<BottomNavigationAction
+					label="Copy + Cmd"
+					value="Copy + Cmd"
+					title={`Copy object with a command to set it to localstorage:\n\tlocalStorage.setItem('title',data)`}
+					onClick={() => copyToClipboard(editorCopy, title)}
+					icon={<FileCopyIcon />}
+				/>
 			</BottomNavigation>
 		</div>
 	);

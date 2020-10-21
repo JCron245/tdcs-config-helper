@@ -14,7 +14,7 @@ const prettierOptions: Options = {
 };
 
 export const prettifyData = (data: any, title: string = 'tdcs.data') => {
-	if (data.startsWith(title)) {
+	if (data?.startsWith(title)) {
 		return prettier.format(data, prettierOptions);
 	}
 	return prettier.format(`${title} = ${data}`, prettierOptions);
